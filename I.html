@@ -299,7 +299,7 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: inset 0 1px 2px white, 0 8px 18px rgba(0, 10, 30, 0.02);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: default;
+            cursor: pointer;
             position: relative;
             word-break: break-all;
         }
@@ -727,501 +727,301 @@
             </div>
             <div class="actions">
                 <button class="action-btn" id="newFolderBtn"><svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" stroke="currentColor"/><path d="M12 10v6M9 13h6" stroke="currentColor" stroke-linecap="round"/></svg> 新建</button>
-                    <button class="action-btn" id="uploadBtn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor"/><polyline points="17 8 12 3 7 8" stroke="currentColor"/><line x1="12" y1="3" x2="12" y2="15" stroke="currentColor"/></svg> 上传</button>
-                </div>
-            </div>
-
-            <div class="toolbar">
-                <div class="path" id="currentPathDisplay">/</div>
-                <input type="text" class="path-input" id="currentPathInput" style="display:none;" placeholder="输入路径">
-                <div style="flex:1"></div>
-                <button class="action-btn" id="refreshBtn"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10" stroke="currentColor"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" stroke="currentColor"/></svg> 刷新</button>
-                <button class="action-btn" id="goHomeBtn"><svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1" stroke="currentColor"/></svg> 根目录</button>
-            </div>
-
-            <div class="batch-bar" id="batchBar">
-                <span class="badge" id="selectedCount">已选 0 项</span>
-                <button class="action-btn" id="batchDeleteBtn"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" stroke="currentColor"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor"/></svg> 删除</button>
-                <button class="action-btn" id="batchReplaceBtn"><svg viewBox="0 0 24 24"><path d="M21 11.5L16 16l-3-3" stroke="currentColor"/><path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" stroke="currentColor"/></svg> 替换</button>
-            </div>
-
-            <div class="file-grid" id="fileGrid"></div>
-        </div>
-
-        <div class="context-menu" id="contextMenu">
-            <button class="item" data-action="delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" stroke="currentColor"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor"/></svg> 删除</button>
-            <button class="item" data-action="replace"><svg viewBox="0 0 24 24"><path d="M21 11.5L16 16l-3-3" stroke="currentColor"/><path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" stroke="currentColor"/></svg> 替换文件</button>
-            <button class="item" data-action="rename"><svg viewBox="0 0 24 24"><path d="M12 20h9" stroke="currentColor"/><path d="M16.5 3.5L20 7l-9 9H7v-4l9-9z" stroke="currentColor"/></svg> 重命名</button>
-        </div>
-
-        <div class="modal-overlay" id="modalOverlay">
-            <div class="modal">
-                <div class="modal-header">
-                    <span class="title" id="modalTitle">编辑文件</span>
-                    <button class="close-btn" id="modalCloseBtn">关闭</button>
-                </div>
-                <div class="modal-body">
-                    <div id="modalPreview" style="display:none;" class="preview-content"></div>
-                    <textarea id="modalEditor" style="display:none;"></textarea>
-                </div>
-                <div class="modal-footer" id="modalFooter">
-                    <button id="modalCancelBtn">取消</button>
-                    <button class="primary" id="modalSaveBtn">保存</button>
-                </div>
+                <button class="action-btn" id="uploadBtn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor"/><polyline points="17 8 12 3 7 8" stroke="currentColor"/><line x1="12" y1="3" x2="12" y2="15" stroke="currentColor"/></svg> 上传</button>
             </div>
         </div>
 
-        <input type="file" id="fileInput" class="hidden-input" multiple>
-        <input type="file" id="replaceInput" class="hidden-input" accept="*/*">
+        <div class="toolbar">
+            <div class="path" id="currentPathDisplay">/</div>
+            <input type="text" class="path-input" id="currentPathInput" style="display:none;" placeholder="输入路径">
+            <div style="flex:1"></div>
+            <button class="action-btn" id="refreshBtn"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10" stroke="currentColor"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" stroke="currentColor"/></svg> 刷新</button>
+            <button class="action-btn" id="goHomeBtn"><svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1" stroke="currentColor"/></svg> 根目录</button>
+        </div>
 
-        <script>
-            (function() {
-                const CORRECT_PASSWORD = 'linlinqirichang';
-                const loginOverlay = document.getElementById('loginOverlay');
-                const passwordInput = document.getElementById('passwordInput');
-                const loginBtn = document.getElementById('loginBtn');
-                const loginError = document.getElementById('loginError');
+        <div class="batch-bar" id="batchBar">
+            <span class="badge" id="selectedCount">已选 0 项</span>
+            <button class="action-btn" id="batchDeleteBtn"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" stroke="currentColor"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor"/></svg> 删除</button>
+            <button class="action-btn" id="batchReplaceBtn"><svg viewBox="0 0 24 24"><path d="M21 11.5L16 16l-3-3" stroke="currentColor"/><path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" stroke="currentColor"/></svg> 替换</button>
+        </div>
 
-                function verifyPassword(input) {
-                    return input === CORRECT_PASSWORD;
+        <div class="file-grid" id="fileGrid"></div>
+    </div>
+
+    <div class="context-menu" id="contextMenu">
+        <button class="item" data-action="delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" stroke="currentColor"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor"/></svg> 删除</button>
+        <button class="item" data-action="replace"><svg viewBox="0 0 24 24"><path d="M21 11.5L16 16l-3-3" stroke="currentColor"/><path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" stroke="currentColor"/></svg> 替换文件</button>
+        <button class="item" data-action="rename"><svg viewBox="0 0 24 24"><path d="M12 20h9" stroke="currentColor"/><path d="M16.5 3.5L20 7l-9 9H7v-4l9-9z" stroke="currentColor"/></svg> 重命名</button>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="title" id="modalTitle">编辑文件</span>
+                <button class="close-btn" id="modalCloseBtn">关闭</button>
+            </div>
+            <div class="modal-body">
+                <div id="modalPreview" style="display:none;" class="preview-content"></div>
+                <textarea id="modalEditor" style="display:none;"></textarea>
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <button id="modalCancelBtn">取消</button>
+                <button class="primary" id="modalSaveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" class="hidden-input" multiple>
+    <input type="file" id="replaceInput" class="hidden-input" accept="*/*">
+
+    <script>
+        (function() {
+            const CORRECT_PASSWORD = 'linlinqirichang';
+            const loginOverlay = document.getElementById('loginOverlay');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+
+            function verifyPassword(input) {
+                return input === CORRECT_PASSWORD;
+            }
+
+            loginBtn.addEventListener('click', () => {
+                const pwd = passwordInput.value;
+                if (!pwd) { loginError.textContent = '请输入密码'; return; }
+                if (verifyPassword(pwd)) {
+                    loginOverlay.classList.add('hidden');
+                    loginError.textContent = '';
+                    passwordInput.value = '';
+                    readDir('/');
+                } else {
+                    loginError.textContent = '密码错误';
+                    passwordInput.value = '';
+                    passwordInput.focus();
                 }
+            });
 
-                loginBtn.addEventListener('click', () => {
-                    const pwd = passwordInput.value;
-                    if (!pwd) { loginError.textContent = '请输入密码'; return; }
-                    if (verifyPassword(pwd)) {
-                        loginOverlay.classList.add('hidden');
-                        loginError.textContent = '';
-                        passwordInput.value = '';
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') loginBtn.click();
+            });
+
+            const grid = document.getElementById('fileGrid');
+            const pathDisplay = document.getElementById('currentPathDisplay');
+            const pathInput = document.getElementById('currentPathInput');
+            const ctxMenu = document.getElementById('contextMenu');
+            const fileInput = document.getElementById('fileInput');
+            const replaceInput = document.getElementById('replaceInput');
+            const newFolderBtn = document.getElementById('newFolderBtn');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const goHomeBtn = document.getElementById('goHomeBtn');
+            const batchDeleteBtn = document.getElementById('batchDeleteBtn');
+            const batchReplaceBtn = document.getElementById('batchReplaceBtn');
+            const selectedCount = document.getElementById('selectedCount');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalEditor = document.getElementById('modalEditor');
+            const modalPreview = document.getElementById('modalPreview');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalCancelBtn = document.getElementById('modalCancelBtn');
+            const modalSaveBtn = document.getElementById('modalSaveBtn');
+
+            let currentEntries = [];
+            let selectedFiles = new Set();
+            let contextTarget = null;
+            let currentPath = '/';
+            let currentModalFile = null;
+            let modalContent = '';
+
+            function sanitizeName(n) { return n.replace(/[^a-zA-Z0-9\-_.\u4e00-\u9fa5]/g, '_'); }
+
+            async function readDir(path) {
+                path = path || currentPath;
+                try {
+                    const res = await fetch(path);
+                    const text = await res.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const links = doc.querySelectorAll('a');
+                    const files = [];
+                    const basePath = path.endsWith('/') ? path : path.substring(0, path.lastIndexOf('/') + 1);
+
+                    for (const link of links) {
+                        const href = link.getAttribute('href');
+                        if (!href || href.startsWith('?') || href.startsWith('#') || href.startsWith('http') || href
+                            .startsWith('javascript:')) continue;
+                        const name = decodeURIComponent(href);
+                        if (name === './' || name === '../' || name === '') continue;
+                        const isDir = href.endsWith('/');
+                        files.push({
+                            name: name,
+                            isDir: isDir,
+                            size: isDir ? '--' : '--',
+                            mtime: new Date().toLocaleDateString(),
+                            path: basePath + name
+                        });
+                    }
+
+                    // 去重
+                    const unique = [];
+                    const seen = new Set();
+                    for (const f of files) {
+                        if (!seen.has(f.name)) {
+                            seen.add(f.name);
+                            unique.push(f);
+                        }
+                    }
+
+                    currentEntries = unique;
+                    currentPath = path;
+                    renderGrid(currentEntries);
+                    pathDisplay.textContent = path;
+                    pathInput.value = path;
+                    pathDisplay.style.display = 'block';
+                    pathInput.style.display = 'none';
+                } catch (e) {
+                    showToast('读取目录失败: ' + e.message);
+                    if (path !== '/') {
+                        currentPath = '/';
                         readDir('/');
-                    } else {
-                        loginError.textContent = '密码错误';
-                        passwordInput.value = '';
-                        passwordInput.focus();
-                    }
-                });
-
-                passwordInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') loginBtn.click();
-                });
-
-                const grid = document.getElementById('fileGrid');
-                const pathDisplay = document.getElementById('currentPathDisplay');
-                const pathInput = document.getElementById('currentPathInput');
-                const ctxMenu = document.getElementById('contextMenu');
-                const fileInput = document.getElementById('fileInput');
-                const replaceInput = document.getElementById('replaceInput');
-                const newFolderBtn = document.getElementById('newFolderBtn');
-                const uploadBtn = document.getElementById('uploadBtn');
-                const refreshBtn = document.getElementById('refreshBtn');
-                const goHomeBtn = document.getElementById('goHomeBtn');
-                const batchDeleteBtn = document.getElementById('batchDeleteBtn');
-                const batchReplaceBtn = document.getElementById('batchReplaceBtn');
-                const selectedCount = document.getElementById('selectedCount');
-                const modalOverlay = document.getElementById('modalOverlay');
-                const modalTitle = document.getElementById('modalTitle');
-                const modalEditor = document.getElementById('modalEditor');
-                const modalPreview = document.getElementById('modalPreview');
-                const modalCloseBtn = document.getElementById('modalCloseBtn');
-                const modalCancelBtn = document.getElementById('modalCancelBtn');
-                const modalSaveBtn = document.getElementById('modalSaveBtn');
-
-                let currentEntries = [];
-                let selectedFiles = new Set();
-                let contextTarget = null;
-                let currentPath = '/';
-                let currentModalFile = null;
-                let modalContent = '';
-
-                function sanitizeName(n) { return n.replace(/[^a-zA-Z0-9\-_.\u4e00-\u9fa5]/g, '_'); }
-
-                async function readDir(path) {
-                    path = path || currentPath;
-                    try {
-                        const res = await fetch(path);
-                        const text = await res.text();
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(text, 'text/html');
-                        const links = doc.querySelectorAll('a');
-                        const files = [];
-                        const basePath = path.endsWith('/') ? path : path.substring(0, path.lastIndexOf('/') + 1);
-
-                        for (const link of links) {
-                            const href = link.getAttribute('href');
-                            if (!href || href.startsWith('?') || href.startsWith('#') || href.startsWith('http') || href
-                                .startsWith('javascript:')) continue;
-                            const name = decodeURIComponent(href);
-                            if (name === './' || name === '../') continue;
-                            const isDir = href.endsWith('/');
-                            files.push({
-                                name: name,
-                                isDir: isDir,
-                                size: isDir ? '--' : '--',
-                                mtime: new Date().toLocaleDateString(),
-                                path: basePath + name
-                            });
-                        }
-
-                        currentEntries = files;
-                        currentPath = path;
-                        renderGrid(currentEntries);
-                        pathDisplay.textContent = path;
-                        pathInput.value = path;
-                        pathDisplay.style.display = 'block';
-                        pathInput.style.display = 'none';
-                    } catch (e) {
-                        showToast('读取目录失败: ' + e.message);
-                        if (path !== '/') {
-                            currentPath = '/';
-                            readDir('/');
-                        }
                     }
                 }
+            }
 
-                function renderGrid(entries) {
-                    grid.innerHTML = '';
-                    selectedFiles.clear();
-                    updateBatchBar();
-                    entries.forEach(entry => {
-                        const el = document.createElement('div');
-                        el.className = 'file-item';
-                        el.dataset.name = entry.name;
-                        el.dataset.isDir = entry.isDir;
-                        el.dataset.path = entry.path;
+            function renderGrid(entries) {
+                grid.innerHTML = '';
+                selectedFiles.clear();
+                updateBatchBar();
+                entries.forEach(entry => {
+                    const el = document.createElement('div');
+                    el.className = 'file-item';
+                    el.dataset.name = entry.name;
+                    el.dataset.isDir = entry.isDir;
+                    el.dataset.path = entry.path;
 
-                        const iconDiv = document.createElement('div');
-                        iconDiv.className = 'file-icon';
+                    const iconDiv = document.createElement('div');
+                    iconDiv.className = 'file-icon';
 
-                        if (entry.isDir) {
+                    if (entry.isDir) {
+                        iconDiv.innerHTML =
+                            `<svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" stroke="currentColor"/></svg>`;
+                    } else {
+                        const ext = entry.name.split('.').pop().toLowerCase();
+                        if (['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(ext)) {
                             iconDiv.innerHTML =
-                                `<svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" stroke="currentColor"/></svg>`;
+                                `<img src="${entry.path}" alt="preview" style="border-radius:16px;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\' stroke=\\'currentColor\\'/><path d=\\'M8 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\\' stroke=\\'currentColor\\'/><path d=\\'M21 15l-5-5-5 5-4-4-3 3\\' stroke=\\'currentColor\\'/></svg>'">`;
+                        } else if (['mp4', 'webm', 'ogg', 'mov'].includes(ext)) {
+                            iconDiv.innerHTML =
+                                `<video src="${entry.path}" muted style="width:100%;height:100%;object-fit:cover;border-radius:16px;"></video>`;
+                        } else if (['mp3', 'wav', 'flac', 'aac'].includes(ext)) {
+                            iconDiv.innerHTML =
+                                `<svg viewBox="0 0 24 24"><rect x=\\'4\\' y=\\'3\\' width=\\'16\\' height=\\'18\\' rx=\\'2\\' stroke=\\'currentColor\\'/><line x1=\\'8\\' y1=\\'8\\' x2=\\'16\\' y2=\\'8\\' stroke=\\'currentColor\\'/><line x1=\\'8\\' y1=\\'12\\' x2=\\'12\\' y2=\\'12\\' stroke=\\'currentColor\\'/></svg>`;
                         } else {
-                            const ext = entry.name.split('.').pop().toLowerCase();
-                            if (['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(ext)) {
-                                iconDiv.innerHTML =
-                                    `<img src="${entry.path}" alt="preview" style="border-radius:16px;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\' stroke=\\'currentColor\\'/><path d=\\'M8 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\\' stroke=\\'currentColor\\'/><path d=\\'M21 15l-5-5-5 5-4-4-3 3\\' stroke=\\'currentColor\\'/></svg>'">`;
-                            } else if (['mp4', 'webm', 'ogg', 'mov'].includes(ext)) {
-                                iconDiv.innerHTML =
-                                    `<video src="${entry.path}" muted style="width:100%;height:100%;object-fit:cover;border-radius:16px;"></video>`;
-                            } else if (['mp3', 'wav', 'flac', 'aac'].includes(ext)) {
-                                iconDiv.innerHTML =
-                                    `<svg viewBox="0 0 24 24"><rect x=\\'4\\' y=\\'3\\' width=\\'16\\' height=\\'18\\' rx=\\'2\\' stroke=\\'currentColor\\'/><line x1=\\'8\\' y1=\\'8\\' x2=\\'16\\' y2=\\'8\\' stroke=\\'currentColor\\'/><line x1=\\'8\\' y1=\\'12\\' x2=\\'12\\' y2=\\'12\\' stroke=\\'currentColor\\'/></svg>`;
-                            } else {
-                                iconDiv.innerHTML =
-                                    `<svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7l-6-6z" stroke="currentColor"/><path d="M14 3v4h4" stroke="currentColor"/></svg>`;
-                            }
+                            iconDiv.innerHTML =
+                                `<svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7l-6-6z" stroke="currentColor"/><path d="M14 3v4h4" stroke="currentColor"/></svg>`;
                         }
+                    }
 
-                        const nameSpan = document.createElement('div');
-                        nameSpan.className = 'file-name';
-                        nameSpan.textContent = entry.name;
+                    const nameSpan = document.createElement('div');
+                    nameSpan.className = 'file-name';
+                    nameSpan.textContent = entry.name;
 
-                        const meta = document.createElement('div');
-                        meta.className = 'file-meta';
-                        meta.textContent = entry.isDir ? '文件夹' : `${entry.size || '--'} · ${entry.mtime || ''}`;
+                    const meta = document.createElement('div');
+                    meta.className = 'file-meta';
+                    meta.textContent = entry.isDir ? '文件夹' : `${entry.size || '--'} · ${entry.mtime || ''}`;
 
-                        el.appendChild(iconDiv);
-                        el.appendChild(nameSpan);
-                        el.appendChild(meta);
+                    el.appendChild(iconDiv);
+                    el.appendChild(nameSpan);
+                    el.appendChild(meta);
 
-                        el.addEventListener('dblclick', () => {
-                            if (entry.isDir) {
-                                readDir(entry.path);
-                            } else {
-                                openFilePreview(entry);
-                            }
-                        });
-
-                        el.addEventListener('click', (e) => {
-                            if (e.shiftKey || e.metaKey || e.ctrlKey) {
-                                toggleSelect(el, entry.name);
-                            } else {
-                                if (selectedFiles.size) {
-                                    selectedFiles.clear();
-                                    document.querySelectorAll('.file-item').forEach(i => i.classList.remove(
-                                    'selected'));
-                                    updateBatchBar();
-                                }
-                            }
-                        });
-
-                        el.addEventListener('contextmenu', (e) => {
-                            e.preventDefault();
-                            contextTarget = { name: entry.name, isDir: entry.isDir, element: el, path: entry
-                                .path };
-                            if (!selectedFiles.has(entry.name)) {
+                    el.addEventListener('click', (e) => {
+                        if (entry.isDir) {
+                            readDir(entry.path);
+                            return;
+                        }
+                        if (e.shiftKey || e.metaKey || e.ctrlKey) {
+                            toggleSelect(el, entry.name);
+                        } else {
+                            if (selectedFiles.size) {
                                 selectedFiles.clear();
                                 document.querySelectorAll('.file-item').forEach(i => i.classList.remove(
                                 'selected'));
-                                toggleSelect(el, entry.name);
+                                updateBatchBar();
                             }
-                            showContextMenu(e.clientX, e.clientY);
-                        });
-
-                        grid.appendChild(el);
+                        }
                     });
-                    updateBatchBar();
-                }
 
-                function toggleSelect(el, name) {
-                    if (selectedFiles.has(name)) {
-                        selectedFiles.delete(name);
-                        el.classList.remove('selected');
-                    } else {
-                        selectedFiles.add(name);
-                        el.classList.add('selected');
-                    }
-                    updateBatchBar();
-                }
-
-                function updateBatchBar() {
-                    const count = selectedFiles.size;
-                    selectedCount.textContent = `已选 ${count} 项`;
-                }
-
-                function showContextMenu(x, y) {
-                    ctxMenu.style.display = 'block';
-                    ctxMenu.style.left = Math.min(x, window.innerWidth - 220) + 'px';
-                    ctxMenu.style.top = Math.min(y, window.innerHeight - 280) + 'px';
-                }
-
-                function hideContextMenu() { ctxMenu.style.display = 'none'; }
-
-                document.addEventListener('click', (e) => {
-                    if (!ctxMenu.contains(e.target)) hideContextMenu();
-                });
-
-                ctxMenu.addEventListener('click', (e) => {
-                    const btn = e.target.closest('.item');
-                    if (!btn) return;
-                    const action = btn.dataset.action;
-                    const target = contextTarget;
-                    if (!target) return;
-                    const name = target.name;
-                    const isDir = target.isDir;
-                    const path = target.path;
-                    hideContextMenu();
-
-                    if (action === 'delete') {
-                        if (confirm(`删除 "${name}" ？`)) {
-                            currentEntries = currentEntries.filter(e => e.name !== name);
-                            renderGrid(currentEntries);
-                            showToast(`已删除 ${name}`);
+                    el.addEventListener('dblclick', () => {
+                        if (!entry.isDir) {
+                            openFilePreview(entry);
                         }
-                    } else if (action === 'replace') {
-                        if (isDir) { showToast('不能替换文件夹'); return; }
-                        replaceInput.click();
-                        replaceInput.onchange = () => {
-                            if (replaceInput.files.length) {
-                                const file = replaceInput.files[0];
-                                const idx = currentEntries.findIndex(e => e.name === name);
-                                if (idx !== -1) {
-                                    currentEntries[idx] = { ...currentEntries[idx], name: file.name,
-                                        size: (file.size / 1024).toFixed(1) + ' KB',
-                                        mtime: new Date().toISOString().slice(0, 10), path: currentPath +
-                                        file.name };
-                                    renderGrid(currentEntries);
-                                    showToast(`已替换为 ${file.name}`);
-                                }
-                            }
-                            replaceInput.value = '';
-                        };
-                    } else if (action === 'rename') {
-                        const newName = prompt('重命名', name);
-                        if (newName && newName.trim()) {
-                            const sanitized = sanitizeName(newName.trim());
-                            const idx = currentEntries.findIndex(e => e.name === name);
-                            if (idx !== -1) {
-                                currentEntries[idx] = { ...currentEntries[idx], name: sanitized,
-                                path: currentPath + sanitized };
-                                renderGrid(currentEntries);
-                                showToast(`已重命名为 ${sanitized}`);
-                            }
+                    });
+
+                    el.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        contextTarget = { name: entry.name, isDir: entry.isDir, element: el, path: entry
+                            .path };
+                        if (!selectedFiles.has(entry.name)) {
+                            selectedFiles.clear();
+                            document.querySelectorAll('.file-item').forEach(i => i.classList.remove(
+                            'selected'));
+                            toggleSelect(el, entry.name);
                         }
-                    }
+                        showContextMenu(e.clientX, e.clientY);
+                    });
+
+                    grid.appendChild(el);
                 });
+                updateBatchBar();
+            }
 
-                async function openFilePreview(entry) {
-                    const ext = entry.name.split('.').pop().toLowerCase();
-                    const isImage = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(ext);
-                    const isVideo = ['mp4', 'webm', 'ogg', 'mov'].includes(ext);
-                    const isAudio = ['mp3', 'wav', 'flac', 'aac'].includes(ext);
-                    const isText = ['txt', 'html', 'htm', 'css', 'js', 'json', 'xml', 'md', 'csv', 'log', 'py', 'java',
-                        'c', 'cpp', 'h', 'go', 'rs', 'rb', 'php', 'sh'
-                    ].includes(ext);
-
-                    modalTitle.textContent = entry.name;
-                    currentModalFile = entry;
-
-                    if (isImage) {
-                        modalPreview.style.display = 'block';
-                        modalEditor.style.display = 'none';
-                        modalPreview.innerHTML = `<img src="${entry.path}" style="max-width:100%;max-height:100%;object-fit:contain;">`;
-                        document.getElementById('modalFooter').style.display = 'none';
-                    } else if (isVideo) {
-                        modalPreview.style.display = 'block';
-                        modalEditor.style.display = 'none';
-                        modalPreview.innerHTML =
-                            `<video src="${entry.path}" controls style="max-width:100%;max-height:100%;"></video>`;
-                        document.getElementById('modalFooter').style.display = 'none';
-                    } else if (isAudio) {
-                        modalPreview.style.display = 'block';
-                        modalEditor.style.display = 'none';
-                        modalPreview.innerHTML =
-                            `<audio src="${entry.path}" controls style="width:100%;"></audio>`;
-                        document.getElementById('modalFooter').style.display = 'none';
-                    } else if (isText) {
-                        try {
-                            const res = await fetch(entry.path);
-                            const content = await res.text();
-                            modalPreview.style.display = 'none';
-                            modalEditor.style.display = 'block';
-                            modalEditor.value = content;
-                            modalContent = content;
-                            document.getElementById('modalFooter').style.display = 'flex';
-                            modalSaveBtn.onclick = async () => {
-                                const newContent = modalEditor.value;
-                                try {
-                                    const resp = await fetch(entry.path, {
-                                        method: 'PUT',
-                                        headers: { 'Content-Type': 'text/plain' },
-                                        body: newContent
-                                    });
-                                    if (resp.ok) {
-                                        showToast(`已保存 ${entry.name}`);
-                                        modalContent = newContent;
-                                        closeModal();
-                                    } else {
-                                        showToast('保存失败');
-                                    }
-                                } catch (err) {
-                                    showToast('保存失败: ' + err.message);
-                                }
-                            };
-                        } catch (err) {
-                            showToast('读取文件失败: ' + err.message);
-                            return;
-                        }
-                    } else {
-                        showToast('不支持预览此文件类型');
-                        return;
-                    }
-
-                    modalOverlay.classList.add('active');
+            function toggleSelect(el, name) {
+                if (selectedFiles.has(name)) {
+                    selectedFiles.delete(name);
+                    el.classList.remove('selected');
+                } else {
+                    selectedFiles.add(name);
+                    el.classList.add('selected');
                 }
+                updateBatchBar();
+            }
 
-                function closeModal() {
-                    modalOverlay.classList.remove('active');
-                    modalPreview.style.display = 'none';
-                    modalEditor.style.display = 'none';
-                    modalPreview.innerHTML = '';
-                    modalEditor.value = '';
-                    document.getElementById('modalFooter').style.display = 'flex';
-                    currentModalFile = null;
-                }
+            function updateBatchBar() {
+                const count = selectedFiles.size;
+                selectedCount.textContent = `已选 ${count} 项`;
+            }
 
-                modalCloseBtn.addEventListener('click', closeModal);
-                modalCancelBtn.addEventListener('click', closeModal);
-                modalOverlay.addEventListener('click', (e) => {
-                    if (e.target === modalOverlay) closeModal();
-                });
+            function showContextMenu(x, y) {
+                ctxMenu.style.display = 'block';
+                ctxMenu.style.left = Math.min(x, window.innerWidth - 220) + 'px';
+                ctxMenu.style.top = Math.min(y, window.innerHeight - 280) + 'px';
+            }
 
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        hideContextMenu();
-                        if (modalOverlay.classList.contains('active')) closeModal();
-                    }
-                });
+            function hideContextMenu() { ctxMenu.style.display = 'none'; }
 
-                function showToast(msg) {
-                    const old = document.querySelector('.toast');
-                    if (old) old.remove();
-                    const t = document.createElement('div');
-                    t.className = 'toast';
-                    t.textContent = msg;
-                    document.body.appendChild(t);
-                    setTimeout(() => t.remove(), 2400);
-                }
+            document.addEventListener('click', (e) => {
+                if (!ctxMenu.contains(e.target)) hideContextMenu();
+            });
 
-                pathDisplay.addEventListener('click', () => {
-                    pathDisplay.style.display = 'none';
-                    pathInput.style.display = 'block';
-                    pathInput.value = currentPath;
-                    pathInput.focus();
-                    pathInput.select();
-                });
+            ctxMenu.addEventListener('click', (e) => {
+                const btn = e.target.closest('.item');
+                if (!btn) return;
+                const action = btn.dataset.action;
+                const target = contextTarget;
+                if (!target) return;
+                const name = target.name;
+                const isDir = target.isDir;
+                const path = target.path;
+                hideContextMenu();
 
-                pathInput.addEventListener('blur', () => {
-                    const val = pathInput.value.trim();
-                    if (val && val !== currentPath) {
-                        readDir(val);
-                    } else {
-                        pathDisplay.style.display = 'block';
-                        pathInput.style.display = 'none';
-                    }
-                });
-
-                pathInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        pathInput.blur();
-                    }
-                    if (e.key === 'Escape') {
-                        pathInput.value = currentPath;
-                        pathInput.blur();
-                    }
-                });
-
-                newFolderBtn.addEventListener('click', () => {
-                    const name = prompt('新建文件夹名称:');
-                    if (name && name.trim()) {
-                        const sanitized = sanitizeName(name.trim());
-                        currentEntries.push({ name: sanitized, isDir: true, size: '--', mtime: new Date()
-                                .toISOString().slice(0, 10), path: currentPath + sanitized + '/' });
+                if (action === 'delete') {
+                    if (confirm(`删除 "${name}" ？`)) {
+                        currentEntries = currentEntries.filter(e => e.name !== name);
                         renderGrid(currentEntries);
-                        showToast(`已创建 ${sanitized}`);
+                        showToast(`已删除 ${name}`);
                     }
-                });
-
-                uploadBtn.addEventListener('click', () => {
-                    fileInput.click();
-                });
-
-                fileInput.addEventListener('change', (e) => {
-                    if (fileInput.files.length) {
-                        const files = Array.from(fileInput.files);
-                        files.forEach(f => {
-                            currentEntries.push({
-                                name: f.name,
-                                isDir: false,
-                                size: (f.size / 1024).toFixed(1) + ' KB',
-                                mtime: new Date().toISOString().slice(0, 10),
-                                path: currentPath + f.name
-                            });
-                        });
-                        renderGrid(currentEntries);
-                        showToast(`上传了 ${files.length} 个文件`);
-                    }
-                    fileInput.value = '';
-                });
-
-                refreshBtn.addEventListener('click', () => readDir(currentPath));
-                goHomeBtn.addEventListener('click', () => readDir('/'));
-
-                batchDeleteBtn.addEventListener('click', () => {
-                    if (!selectedFiles.size) return;
-                    if (confirm(`删除 ${selectedFiles.size} 个选定项？`)) {
-                        currentEntries = currentEntries.filter(e => !selectedFiles.has(e.name));
-                        selectedFiles.clear();
-                        renderGrid(currentEntries);
-                        showToast(`已删除批量项`);
-                    }
-                });
-
-                batchReplaceBtn.addEventListener('click', () => {
-                    if (selectedFiles.size !== 1) { showToast('请单选一个文件替换'); return; }
-                    const name = [...selectedFiles][0];
-                    const entry = currentEntries.find(e => e.name === name);
-                    if (!entry || entry.isDir) { showToast('不能替换文件夹'); return; }
+                } else if (action === 'replace') {
+                    if (isDir) { showToast('不能替换文件夹'); return; }
                     replaceInput.click();
                     replaceInput.onchange = () => {
                         if (replaceInput.files.length) {
@@ -1232,15 +1032,230 @@
                                     size: (file.size / 1024).toFixed(1) + ' KB',
                                     mtime: new Date().toISOString().slice(0, 10), path: currentPath +
                                     file.name };
-                                selectedFiles.clear();
                                 renderGrid(currentEntries);
-                                showToast(`替换为 ${file.name}`);
+                                showToast(`已替换为 ${file.name}`);
                             }
                         }
                         replaceInput.value = '';
                     };
-                });
-            })();
-        </script>
-    </body>
-    </html>
+                } else if (action === 'rename') {
+                    const newName = prompt('重命名', name);
+                    if (newName && newName.trim()) {
+                        const sanitized = sanitizeName(newName.trim());
+                        const idx = currentEntries.findIndex(e => e.name === name);
+                        if (idx !== -1) {
+                            currentEntries[idx] = { ...currentEntries[idx], name: sanitized,
+                            path: currentPath + sanitized };
+                            renderGrid(currentEntries);
+                            showToast(`已重命名为 ${sanitized}`);
+                        }
+                    }
+                }
+            });
+
+            async function openFilePreview(entry) {
+                const ext = entry.name.split('.').pop().toLowerCase();
+                const isImage = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(ext);
+                const isVideo = ['mp4', 'webm', 'ogg', 'mov'].includes(ext);
+                const isAudio = ['mp3', 'wav', 'flac', 'aac'].includes(ext);
+                const isText = ['txt', 'html', 'htm', 'css', 'js', 'json', 'xml', 'md', 'csv', 'log', 'py', 'java',
+                    'c', 'cpp', 'h', 'go', 'rs', 'rb', 'php', 'sh'
+                ].includes(ext);
+
+                modalTitle.textContent = entry.name;
+                currentModalFile = entry;
+
+                if (isImage) {
+                    modalPreview.style.display = 'block';
+                    modalEditor.style.display = 'none';
+                    modalPreview.innerHTML = `<img src="${entry.path}" style="max-width:100%;max-height:100%;object-fit:contain;">`;
+                    document.getElementById('modalFooter').style.display = 'none';
+                } else if (isVideo) {
+                    modalPreview.style.display = 'block';
+                    modalEditor.style.display = 'none';
+                    modalPreview.innerHTML =
+                        `<video src="${entry.path}" controls style="max-width:100%;max-height:100%;"></video>`;
+                    document.getElementById('modalFooter').style.display = 'none';
+                } else if (isAudio) {
+                    modalPreview.style.display = 'block';
+                    modalEditor.style.display = 'none';
+                    modalPreview.innerHTML =
+                        `<audio src="${entry.path}" controls style="width:100%;"></audio>`;
+                    document.getElementById('modalFooter').style.display = 'none';
+                } else if (isText) {
+                    try {
+                        const res = await fetch(entry.path);
+                        const content = await res.text();
+                        modalPreview.style.display = 'none';
+                        modalEditor.style.display = 'block';
+                        modalEditor.value = content;
+                        modalContent = content;
+                        document.getElementById('modalFooter').style.display = 'flex';
+                        modalSaveBtn.onclick = async () => {
+                            const newContent = modalEditor.value;
+                            try {
+                                const resp = await fetch(entry.path, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'text/plain' },
+                                    body: newContent
+                                });
+                                if (resp.ok) {
+                                    showToast(`已保存 ${entry.name}`);
+                                    modalContent = newContent;
+                                    closeModal();
+                                } else {
+                                    showToast('保存失败');
+                                }
+                            } catch (err) {
+                                showToast('保存失败: ' + err.message);
+                            }
+                        };
+                    } catch (err) {
+                        showToast('读取文件失败: ' + err.message);
+                        return;
+                    }
+                } else {
+                    showToast('不支持预览此文件类型');
+                    return;
+                }
+
+                modalOverlay.classList.add('active');
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                modalPreview.style.display = 'none';
+                modalEditor.style.display = 'none';
+                modalPreview.innerHTML = '';
+                modalEditor.value = '';
+                document.getElementById('modalFooter').style.display = 'flex';
+                currentModalFile = null;
+            }
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalCancelBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    hideContextMenu();
+                    if (modalOverlay.classList.contains('active')) closeModal();
+                }
+            });
+
+            function showToast(msg) {
+                const old = document.querySelector('.toast');
+                if (old) old.remove();
+                const t = document.createElement('div');
+                t.className = 'toast';
+                t.textContent = msg;
+                document.body.appendChild(t);
+                setTimeout(() => t.remove(), 2400);
+            }
+
+            pathDisplay.addEventListener('click', () => {
+                pathDisplay.style.display = 'none';
+                pathInput.style.display = 'block';
+                pathInput.value = currentPath;
+                pathInput.focus();
+                pathInput.select();
+            });
+
+            pathInput.addEventListener('blur', () => {
+                const val = pathInput.value.trim();
+                if (val && val !== currentPath) {
+                    readDir(val);
+                } else {
+                    pathDisplay.style.display = 'block';
+                    pathInput.style.display = 'none';
+                }
+            });
+
+            pathInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    pathInput.blur();
+                }
+                if (e.key === 'Escape') {
+                    pathInput.value = currentPath;
+                    pathInput.blur();
+                }
+            });
+
+            newFolderBtn.addEventListener('click', () => {
+                const name = prompt('新建文件夹名称:');
+                if (name && name.trim()) {
+                    const sanitized = sanitizeName(name.trim());
+                    currentEntries.push({ name: sanitized, isDir: true, size: '--', mtime: new Date()
+                            .toISOString().slice(0, 10), path: currentPath + sanitized + '/' });
+                    renderGrid(currentEntries);
+                    showToast(`已创建 ${sanitized}`);
+                }
+            });
+
+            uploadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (fileInput.files.length) {
+                    const files = Array.from(fileInput.files);
+                    files.forEach(f => {
+                        currentEntries.push({
+                            name: f.name,
+                            isDir: false,
+                            size: (f.size / 1024).toFixed(1) + ' KB',
+                            mtime: new Date().toISOString().slice(0, 10),
+                            path: currentPath + f.name
+                        });
+                    });
+                    renderGrid(currentEntries);
+                    showToast(`上传了 ${files.length} 个文件`);
+                }
+                fileInput.value = '';
+            });
+
+            refreshBtn.addEventListener('click', () => readDir(currentPath));
+            goHomeBtn.addEventListener('click', () => readDir('/'));
+
+            batchDeleteBtn.addEventListener('click', () => {
+                if (!selectedFiles.size) return;
+                if (confirm(`删除 ${selectedFiles.size} 个选定项？`)) {
+                    currentEntries = currentEntries.filter(e => !selectedFiles.has(e.name));
+                    selectedFiles.clear();
+                    renderGrid(currentEntries);
+                    showToast(`已删除批量项`);
+                }
+            });
+
+            batchReplaceBtn.addEventListener('click', () => {
+                if (selectedFiles.size !== 1) { showToast('请单选一个文件替换'); return; }
+                const name = [...selectedFiles][0];
+                const entry = currentEntries.find(e => e.name === name);
+                if (!entry || entry.isDir) { showToast('不能替换文件夹'); return; }
+                replaceInput.click();
+                replaceInput.onchange = () => {
+                    if (replaceInput.files.length) {
+                        const file = replaceInput.files[0];
+                        const idx = currentEntries.findIndex(e => e.name === name);
+                        if (idx !== -1) {
+                            currentEntries[idx] = { ...currentEntries[idx], name: file.name,
+                                size: (file.size / 1024).toFixed(1) + ' KB',
+                                mtime: new Date().toISOString().slice(0, 10), path: currentPath +
+                                file.name };
+                            selectedFiles.clear();
+                            renderGrid(currentEntries);
+                            showToast(`替换为 ${file.name}`);
+                        }
+                    }
+                    replaceInput.value = '';
+                };
+            });
+
+            // 初始加载
+            readDir('/');
+        })();
+    </script>
+</body>
+</html>
