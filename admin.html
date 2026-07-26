@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 30% 20%, #eef4fb, #d3deed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .glass {
+      width: 100%;
+      max-width: 1440px;
+      height: 94vh;
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-radius: 48px;
+      box-shadow: 0 24px 56px rgba(0, 10, 30, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -4px 8px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(255, 255, 255, 0.5);
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50px;
+      padding: 2px;
+      background: conic-gradient(from 100deg at 40% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(200, 220, 250, 0.2) 35%, rgba(255, 255, 255, 0.5) 65%, rgba(190, 215, 245, 0.1) 85%, rgba(255, 255, 255, 0.8) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    .login-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 48px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      gap: 28px;
+    }
+
+    .login-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.96);
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      padding: 40px 48px;
+      border-radius: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: inset 0 1px 2px white, 0 20px 40px rgba(0, 10, 30, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      min-width: 320px;
+    }
+
+    .login-box svg {
+      width: 48px;
+      height: 48px;
+      stroke: #1f2a3f;
+      stroke-width: 1.6;
+      fill: none;
+    }
+
+    .login-box input {
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 40px;
+      padding: 14px 24px;
+      font-size: 16px;
+      width: 100%;
+      outline: none;
+      backdrop-filter: blur(4px);
+      transition: 0.2s;
+      color: #1b253b;
+    }
+
+    .login-box input:focus {
+      background: rgba(255, 255, 255, 0.5);
+      border-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+    }
+
+    .login-box button {
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 40px;
+      padding: 12px 40px;
+      font-size: 16px;
+      font-weight: 450;
+      color: #1f2a3f;
+      backdrop-filter: blur(4px);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: inset 0 1px 2px white;
+      width: 100%;
+    }
+
+    .login-box button:hover {
+      background: rgba(255, 255, 255, 0.7);
+      transform: scale(0.98);
+    }
+
+    .login-error {
+      color: #b13e3e;
+      font-size: 14px;
+      background: rgba(255, 200, 200, 0.15);
+      padding: 4px 20px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 150, 150, 0.2);
+      min-height: 32px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand svg {
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.02));
+    }
+
+    .brand span {
+      font-size: 22px;
+      font-weight: 480;
+      letter-spacing: 0.3px;
+      color: #1a2639;
+      background: rgba(255,255,255,0.3);
+      padding: 4px 18px 4px 14px;
+      border-radius: 40px;
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 30px;
+      padding: 8px 18px;
+      font-size: 14px;
+      font-weight: 450;
+      color: #1f2a3f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: inset 0 1px 2px white, 0 4px 10px rgba(0, 0, 0, 0.02);
+      cursor: pointer;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.7);
+      transform: scale(0.97);
+      box-shadow: inset 0 1px 4px white, 0 8px 18px rgba(0, 10, 30, 0.04);
+    }
+
+    .action-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #1f2a3f;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0 12px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .toolbar .path {
+      background: rgba(255, 255, 255, 0.3);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 14px;
+      color: #1b253b;
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      flex: 1;
+      min-width: 160px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-grid {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 8px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 16px 20px;
+      scroll-behavior: smooth;
+    }
+
+    .file-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+    .file-grid::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+    }
+    .file-grid::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 20px;
+      backdrop-filter: blur(2px);
+    }
+
+    .file-item {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 18px 14px 14px;
+      width: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: inset 0 1px 2px white, 0 8px 18px rgba(0, 10, 30, 0.02);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default;
+      position: relative;
+      word-break: break-all;
+    }
+
+    .file-item:hover {
+      transform: translateY(-4px) scale(1.01);
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: inset 0 1px 4px white, 0 16px 32px rgba(0, 10, 30, 0.06);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .file-item.selected {
+      background: rgba(255, 255, 255, 0.65);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 4px white;
+    }
+
+    .file-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      transition: 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 6px;
+    }
+
+    .file-icon img, .file-icon video {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 16px;
+      object-fit: contain;
+    }
+
+    .file-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: #1f2a3f;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .file-name {
+      font-size: 13px;
+      font-weight: 450;
+      color: #1b253b;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 2px 12px;
+      border-radius: 30px;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 2px;
+    }
+
+    .file-meta {
+      font-size: 10px;
+      color: #3a4a62;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .context-menu {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-radius: 28px;
+      padding: 10px 6px;
+      min-width: 190px;
+      box-shadow: 0 20px 48px rgba(0, 10, 30, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      display: none;
+      z-index: 999;
+      animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .context-menu .item {
+      padding: 10px 22px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 430;
+      color: #142232;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .context-menu .item:hover {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(4px);
+      transform: scale(0.97);
+    }
+
+    .context-menu .item svg {
+      width: 20px;
+      height: 20px;
+      stroke: #1f2a3f;
+      stroke-width: 1.6;
+      fill: none;
+    }
+
+    .context-menu .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 6px 14px;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.94) translateY(-6px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      padding: 12px 32px;
+      border-radius: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+      font-size: 15px;
+      color: #1b253b;
+      animation: fadeSlide 0.3s ease;
+      z-index: 1000;
+    }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateX(-50%) translateY(16px); }
+      100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    .batch-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 4px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .batch-bar .badge {
+      background: rgba(255,255,255,0.3);
+      padding: 4px 18px;
+      border-radius: 40px;
+      font-size: 13px;
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .batch-bar .action-btn {
+      padding: 4px 16px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+<div class="glass" id="app">
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor"/><path d="M9 9l3 3-3 3M15 9l-3 3 3 3" stroke="currentColor"/></svg>
+      <input type="password" id="passwordInput" placeholder="输入管理密码" autocomplete="off">
+      <button id="loginBtn">解锁</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none" stroke="#1f2a3f" stroke-width="1.8"><rect x="3" y="3" width="26" height="26" rx="8" stroke="currentColor"/><path d="M10 10 L22 10 M10 16 L18 16 M10 22 L22 22" stroke="currentColor" stroke-linecap="round"/></svg>
+      <span>Admin</span>
+    </div>
+    <div class="actions">
+      <button class="action-btn" id="newFolderBtn"><svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" stroke="currentColor"/><path d="M12 10v6M9 13h6" stroke="currentColor" stroke-linecap="round"/></svg> 新建</button>
+      <button class="action-btn" id="uploadBtn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor"/><polyline points="17 8 12 3 7 8" stroke="currentColor"/><line x1="12" y1="3" x2="12" y2="15" stroke="currentColor"/></svg> 上传</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="path" id="currentPath">/</div>
+    <div style="flex:1"></div>
+    <button class="action-btn" id="refreshBtn"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10" stroke="currentColor"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" stroke="currentColor"/></svg> 刷新</button>
+  </div>
+
+  <div class="batch-bar" id="batchBar">
+    <span class="badge" id="selectedCount">已选 0 项</span>
+    <button class="action-btn" id="batchDeleteBtn"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" stroke="currentColor"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor"/></svg> 删除</button>
+    <button class="action-btn" id="batchReplaceBtn"><svg viewBox="0 0 24 24"><path d="M21 11.5L16 16l-3-3" stroke="currentColor"/><path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" stroke="currentColor"/></svg> 替换</button>
+  </div>
+
+  <div class="file-grid" id="fileGrid"></div>
+</div>
+
+<div class="context-menu" id="contextMenu">
+  <button class="item" data-action="delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" stroke="currentColor"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor"/></svg> 删除</button>
+  <button class="item" data-action="replace"><svg viewBox="0 0 24 24"><path d="M21 11.5L16 16l-3-3" stroke="currentColor"/><path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" stroke="currentColor"/></svg> 替换文件</button>
+  <button class="item" data-action="edit-html"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6" stroke="currentColor"/><polyline points="8 6 2 12 8 18" stroke="currentColor"/></svg> 编辑 HTML</button>
+  <div class="divider"></div>
+  <button class="item" data-action="rename"><svg viewBox="0 0 24 24"><path d="M12 20h9" stroke="currentColor"/><path d="M16.5 3.5L20 7l-9 9H7v-4l9-9z" stroke="currentColor"/></svg> 重命名</button>
+</div>
+
+<input type="file" id="fileInput" class="hidden-input" multiple webkitdirectory>
+<input type="file" id="replaceInput" class="hidden-input" accept="*/*">
+
+<script>
+  (function(){
+    const CORRECT_PASSWORD = 'linlinqirichang';
+    const loginOverlay = document.getElementById('loginOverlay');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+
+    function verifyPassword(input) {
+      return input === CORRECT_PASSWORD;
+    }
+
+    loginBtn.addEventListener('click', () => {
+      const pwd = passwordInput.value;
+      if (!pwd) { loginError.textContent = '请输入密码'; return; }
+      if (verifyPassword(pwd)) {
+        loginOverlay.classList.add('hidden');
+        loginError.textContent = '';
+        passwordInput.value = '';
+        readDir();
+      } else {
+        loginError.textContent = '密码错误';
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    });
+
+    passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') loginBtn.click();
+    });
+
+    const grid = document.getElementById('fileGrid');
+    const pathEl = document.getElementById('currentPath');
+    const ctxMenu = document.getElementById('contextMenu');
+    const fileInput = document.getElementById('fileInput');
+    const replaceInput = document.getElementById('replaceInput');
+    const newFolderBtn = document.getElementById('newFolderBtn');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const batchDeleteBtn = document.getElementById('batchDeleteBtn');
+    const batchReplaceBtn = document.getElementById('batchReplaceBtn');
+    const selectedCount = document.getElementById('selectedCount');
+
+    let currentEntries = [];
+    let selectedFiles = new Set();
+    let contextTarget = null;
+
+    function sanitizeName(n) { return n.replace(/[^a-zA-Z0-9\-_.\u4e00-\u9fa5]/g, '_'); }
+
+    async function readDir() {
+      try {
+        const res = await fetch(window.location.href);
+        const text = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        const links = doc.querySelectorAll('a');
+        const files = [];
+        const currentPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+        for (const link of links) {
+          const href = link.getAttribute('href');
+          if (!href || href.startsWith('?') || href.startsWith('#') || href.startsWith('http') || href.startsWith('javascript:')) continue;
+          const name = decodeURIComponent(href);
+          if (name === './' || name === '../') continue;
+          const isDir = href.endsWith('/');
+          files.push({
+            name: name,
+            isDir: isDir,
+            size: isDir ? '--' : '--',
+            mtime: new Date().toLocaleDateString()
+          });
+        }
+        currentEntries = files;
+        renderGrid(currentEntries);
+        pathEl.textContent = currentPath || '/';
+      } catch (e) {
+        showToast('读取目录失败: ' + e.message);
+      }
+    }
+
+    function renderGrid(entries) {
+      grid.innerHTML = '';
+      selectedFiles.clear();
+      updateBatchBar();
+      entries.forEach(entry => {
+        const el = document.createElement('div');
+        el.className = 'file-item';
+        el.dataset.name = entry.name;
+        el.dataset.isDir = entry.isDir;
+
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'file-icon';
+
+        if (entry.isDir) {
+          iconDiv.innerHTML = `<svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" stroke="currentColor"/></svg>`;
+        } else {
+          const ext = entry.name.split('.').pop().toLowerCase();
+          if (['jpg','jpeg','png','gif','svg','webp','bmp'].includes(ext)) {
+            iconDiv.innerHTML = `<img src="${entry.name}" alt="preview" style="border-radius:16px;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\' stroke=\\'currentColor\\'/><path d=\\'M8 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\\' stroke=\\'currentColor\\'/><path d=\\'M21 15l-5-5-5 5-4-4-3 3\\' stroke=\\'currentColor\\'/></svg>'">`;
+          } else if (['mp4','webm','ogg','mov'].includes(ext)) {
+            iconDiv.innerHTML = `<video src="${entry.name}" muted style="width:100%;height:100%;object-fit:cover;border-radius:16px;"></video>`;
+          } else if (['mp3','wav','flac','aac'].includes(ext)) {
+            iconDiv.innerHTML = `<svg viewBox="0 0 24 24"><rect x=\\'4\\' y=\\'3\\' width=\\'16\\' height=\\'18\\' rx=\\'2\\' stroke=\\'currentColor\\'/><line x1=\\'8\\' y1=\\'8\\' x2=\\'16\\' y2=\\'8\\' stroke=\\'currentColor\\'/><line x1=\\'8\\' y1=\\'12\\' x2=\\'12\\' y2=\\'12\\' stroke=\\'currentColor\\'/></svg>`;
+          } else {
+            iconDiv.innerHTML = `<svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7l-6-6z" stroke="currentColor"/><path d="M14 3v4h4" stroke="currentColor"/></svg>`;
+          }
+        }
+
+        const nameSpan = document.createElement('div');
+        nameSpan.className = 'file-name';
+        nameSpan.textContent = entry.name;
+
+        const meta = document.createElement('div');
+        meta.className = 'file-meta';
+        meta.textContent = entry.isDir ? '文件夹' : `${entry.size || '--'} · ${entry.mtime || ''}`;
+
+        el.appendChild(iconDiv);
+        el.appendChild(nameSpan);
+        el.appendChild(meta);
+
+        el.addEventListener('click', (e) => {
+          if (e.shiftKey || e.metaKey || e.ctrlKey) {
+            toggleSelect(el, entry.name);
+          } else {
+            if (selectedFiles.size) {
+              selectedFiles.clear();
+              document.querySelectorAll('.file-item').forEach(i => i.classList.remove('selected'));
+              updateBatchBar();
+            } else {
+              if (!entry.isDir) {
+                showToast(entry.name);
+              }
+            }
+          }
+        });
+
+        el.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          contextTarget = { name: entry.name, isDir: entry.isDir, element: el };
+          if (!selectedFiles.has(entry.name)) {
+            selectedFiles.clear();
+            document.querySelectorAll('.file-item').forEach(i => i.classList.remove('selected'));
+            toggleSelect(el, entry.name);
+          }
+          showContextMenu(e.clientX, e.clientY);
+        });
+
+        grid.appendChild(el);
+      });
+      updateBatchBar();
+    }
+
+    function toggleSelect(el, name) {
+      if (selectedFiles.has(name)) {
+        selectedFiles.delete(name);
+        el.classList.remove('selected');
+      } else {
+        selectedFiles.add(name);
+        el.classList.add('selected');
+      }
+      updateBatchBar();
+    }
+
+    function updateBatchBar() {
+      const count = selectedFiles.size;
+      selectedCount.textContent = `已选 ${count} 项`;
+    }
+
+    function showContextMenu(x, y) {
+      ctxMenu.style.display = 'block';
+      ctxMenu.style.left = Math.min(x, window.innerWidth - 220) + 'px';
+      ctxMenu.style.top = Math.min(y, window.innerHeight - 280) + 'px';
+    }
+
+    function hideContextMenu() { ctxMenu.style.display = 'none'; }
+
+    document.addEventListener('click', (e) => {
+      if (!ctxMenu.contains(e.target)) hideContextMenu();
+    });
+
+    ctxMenu.addEventListener('click', (e) => {
+      const btn = e.target.closest('.item');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const target = contextTarget;
+      if (!target) return;
+      const name = target.name;
+      const isDir = target.isDir;
+      hideContextMenu();
+
+      if (action === 'delete') {
+        if (confirm(`删除 "${name}" ？`)) {
+          currentEntries = currentEntries.filter(e => e.name !== name);
+          renderGrid(currentEntries);
+          showToast(`已删除 ${name}`);
+        }
+      } else if (action === 'replace') {
+        if (isDir) { showToast('不能替换文件夹'); return; }
+        replaceInput.click();
+        replaceInput.onchange = () => {
+          if (replaceInput.files.length) {
+            const file = replaceInput.files[0];
+            const idx = currentEntries.findIndex(e => e.name === name);
+            if (idx !== -1) {
+              currentEntries[idx] = { ...currentEntries[idx], name: file.name, size: (file.size/1024).toFixed(1)+' KB', mtime: new Date().toISOString().slice(0,10) };
+              renderGrid(currentEntries);
+              showToast(`已替换为 ${file.name}`);
+            }
+          }
+          replaceInput.value = '';
+        };
+      } else if (action === 'edit-html') {
+        if (isDir || !name.endsWith('.html')) { showToast('仅支持 .html 文件'); return; }
+        const idx = currentEntries.findIndex(e => e.name === name);
+        if (idx !== -1) {
+          const newName = prompt('编辑 HTML (重命名或保持)', name);
+          if (newName && newName.trim()) {
+            const sanitized = sanitizeName(newName.trim());
+            currentEntries[idx] = { ...currentEntries[idx], name: sanitized };
+            renderGrid(currentEntries);
+            showToast(`HTML 已更新为 ${sanitized}`);
+          }
+        }
+      } else if (action === 'rename') {
+        const newName = prompt('重命名', name);
+        if (newName && newName.trim()) {
+          const sanitized = sanitizeName(newName.trim());
+          const idx = currentEntries.findIndex(e => e.name === name);
+          if (idx !== -1) {
+            currentEntries[idx] = { ...currentEntries[idx], name: sanitized };
+            renderGrid(currentEntries);
+            showToast(`已重命名为 ${sanitized}`);
+          }
+        }
+      }
+    });
+
+    function showToast(msg) {
+      const old = document.querySelector('.toast');
+      if (old) old.remove();
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2400);
+    }
+
+    newFolderBtn.addEventListener('click', () => {
+      const name = prompt('新建文件夹名称:');
+      if (name && name.trim()) {
+        const sanitized = sanitizeName(name.trim());
+        currentEntries.push({ name: sanitized, isDir: true, size: '--', mtime: new Date().toISOString().slice(0,10) });
+        renderGrid(currentEntries);
+        showToast(`已创建 ${sanitized}`);
+      }
+    });
+
+    uploadBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (fileInput.files.length) {
+        const files = Array.from(fileInput.files);
+        files.forEach(f => {
+          currentEntries.push({
+            name: f.name,
+            isDir: false,
+            size: (f.size/1024).toFixed(1)+' KB',
+            mtime: new Date().toISOString().slice(0,10)
+          });
+        });
+        renderGrid(currentEntries);
+        showToast(`上传了 ${files.length} 个文件`);
+      }
+      fileInput.value = '';
+    });
+
+    refreshBtn.addEventListener('click', readDir);
+
+    batchDeleteBtn.addEventListener('click', () => {
+      if (!selectedFiles.size) return;
+      if (confirm(`删除 ${selectedFiles.size} 个选定项？`)) {
+        currentEntries = currentEntries.filter(e => !selectedFiles.has(e.name));
+        selectedFiles.clear();
+        renderGrid(currentEntries);
+        showToast(`已删除批量项`);
+      }
+    });
+
+    batchReplaceBtn.addEventListener('click', () => {
+      if (selectedFiles.size !== 1) { showToast('请单选一个文件替换'); return; }
+      const name = [...selectedFiles][0];
+      const entry = currentEntries.find(e => e.name === name);
+      if (!entry || entry.isDir) { showToast('不能替换文件夹'); return; }
+      replaceInput.click();
+      replaceInput.onchange = () => {
+        if (replaceInput.files.length) {
+          const file = replaceInput.files[0];
+          const idx = currentEntries.findIndex(e => e.name === name);
+          if (idx !== -1) {
+            currentEntries[idx] = { ...currentEntries[idx], name: file.name, size: (file.size/1024).toFixed(1)+' KB', mtime: new Date().toISOString().slice(0,10) };
+            selectedFiles.clear();
+            renderGrid(currentEntries);
+            showToast(`替换为 ${file.name}`);
+          }
+        }
+        replaceInput.value = '';
+      };
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideContextMenu();
+    });
+
+    readDir();
+  })();
+</script>
+</body>
+</html>
